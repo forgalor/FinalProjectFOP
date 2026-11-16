@@ -8,6 +8,8 @@ namespace FinalPetaFOP
 {
     internal class Program
     {
+        public static List<User> userList = new List<User>();
+
         static void Main(string[] args)
         {
             Console.WriteLine("Choose an option:");
@@ -15,7 +17,6 @@ namespace FinalPetaFOP
             Console.WriteLine("2. Warehouse");
             Console.WriteLine("3. User");
 
-            Console.Write("Enter choice: ");
             int choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -32,26 +33,42 @@ namespace FinalPetaFOP
 
                 case 3:
                     User user = new User();
-                    user.Order();
+                    user.Run();
                     break;
 
                 default:
                     Console.WriteLine("Invalid choice!");
                     break;
+            }   
+        }
+        public static User GetUserInfo()
+        {
+            Console.Write("\nPlease enter your username: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Please enter your password: ");
+            string password = Console.ReadLine();
+
+            User userInfo = new User(name, password);
+
+            userList.Add(userInfo);
+
+            return userInfo;
+        }
+        public static void DisplayUsers()
+        {
+            if (userList.Count == 0)
+            {
+                Console.WriteLine("No users found.");
+                return;
             }
 
-        }
-            public static string GetUserInfo()
+            foreach (User user in userList)
             {
-                Console.Write("Please enter your username: ");
-                string name = Console.ReadLine();
-
-                Console.Write("Please enter your password: ");
-                string password = Console.ReadLine();
-
-                return $"Name: {name}, Password: {password}";
+                Console.WriteLine($"Username: {user.Name}");
             }
         }
     }
+}
 
 

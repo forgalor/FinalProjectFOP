@@ -15,12 +15,10 @@ namespace FinalPetaFOP
 
             var keepRunning = true;
 
+            Program.GetUserInfo();
+
             while (keepRunning)
             {
-                Console.WriteLine("");
-
-                Program.GetUserInfo();
-
                 var optionSelect = "Please select an option: "+ 
                                     "\n1. Add Products" + 
                                     "\n2. Display Products" +
@@ -51,7 +49,7 @@ namespace FinalPetaFOP
         }
         public void AddProducts(List<string> productList)
         {
-            Console.Write("Enter product name: ");
+            Console.Write("\nEnter product name: ");
             string productName = Console.ReadLine();
 
             Console.Write("Enter product quantity: ");
