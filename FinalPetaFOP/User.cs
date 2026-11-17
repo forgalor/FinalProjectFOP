@@ -24,35 +24,40 @@ namespace FinalPetaFOP
 
         public void Run()
         {
-            List<string> productList = new List<string>();
+            List<Warehouse> productList = new List<Warehouse>();
 
             var keepRunning = true;
 
-            User userInfo = Program.GetUserInfo();
+            User userInfo = Program.UserLogin();
 
             Console.WriteLine($"Welcome, {userInfo.Name}!");
 
             while (keepRunning)
             {
                 var optionSelect = "Please select an option: " +
-                                    "\n1. Add Products" +
-                                    "\n2. Display Products" +
+                                    "\n1. Order" +
+                                    "\n2. Display Order" +
                                     "\n3. Logout";
 
                 Console.WriteLine("");
+
                 Console.WriteLine(optionSelect);
 
-                var userChoice = Convert.ToInt32(Console.ReadLine());
+                var userChoice = Console.ReadLine();
 
-                switch (userChoice)
+                if (!int.TryParse(userChoice, out int userInput))
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number.");
+                    return;
+                }
+                switch (userInput)
                 {
                     case 1:
-                        DisplayOrder(productList);
+                        Order(productList);
                         break;
 
                     case 2:
-                        Warehouse warehouse = new Warehouse();
-                        warehouse.DisplayProducts(productList);
+                        DisplayOrder(productList);
                         break;
 
                     case 3:
@@ -66,7 +71,48 @@ namespace FinalPetaFOP
             }
         }
 
-        public void DisplayOrder(List<string> productList)
+        public void Order(List<Warehouse> productList)
+        {
+            if (productList.Count == 0)
+                Console.WriteLine("No Record found");
+
+            foreach (var product in productList)
+            {
+                for (int i = 1; i <= productList.Count; i++)
+                {
+                    Console.WriteLine($"\n{i}. Product Name: {product.Name}");
+                    Console.WriteLine($"{i}Quantity: {product.Quantity}");
+                }
+            }
+            Console.WriteLine("\nPlease enter the number of the product you would like to order: ");
+            if (!int.TryParse(Console.ReadLine(), out int productNumber) || productNumber < 1 || productNumber > productList.Count)
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+                return;
+            }
+            if (productList[productNumber - 1].Quantity <= 0)
+            {
+                Console.WriteLine("Sorry, this product is out of stock.");
+                return;
+            }
+            Console.WriteLine("Please enter quantity you would like to order: ");
+            if (!int.TryParse(Console.ReadLine(), out int quantity) || quantity <= 0)
+            {
+                Console.WriteLine("Invalid input. Please enter a valid quantity.");
+                return;
+            }
+            if (productList[productNumber - 1].Quantity >= quantity)
+            {
+                productList[productNumber - 1].Quantity -= quantity;
+                Console.WriteLine($"Order has been successfully created.");
+            }
+            else
+            {
+                Console.WriteLine("Insufficient stock.");
+            }
+            
+        }
+        public void DisplayOrder(List<Warehouse> productList)
         {
             Console.WriteLine("Test");
         }

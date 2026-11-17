@@ -10,16 +10,25 @@ namespace FinalPetaFOP
     {
         public static List<User> userList = new List<User>();
 
+        public static List<Warehouse> productList = new List<Warehouse>();
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Choose an option:");
-            Console.WriteLine("1. Admin");
-            Console.WriteLine("2. Warehouse");
-            Console.WriteLine("3. User");
+            var optionSelect = "Choose an option: " +
+                                    "\n1. Admin" +
+                                    "\n2. Warehouse" +
+                                    "\n3. User";
 
-            int choice = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine(optionSelect);
+            var userChoice = Console.ReadLine();
 
-            switch (choice)
+            if (!int.TryParse(userChoice, out int userInput))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+                return;
+            }
+          
+            switch (userInput)
             {
                 case 1:
                     Admin admin = new Admin();
@@ -41,7 +50,7 @@ namespace FinalPetaFOP
                     break;
             }   
         }
-        public static User GetUserInfo()
+        public static User UserLogin()
         {
             Console.Write("\nPlease enter your username: ");
             string name = Console.ReadLine();
@@ -49,24 +58,27 @@ namespace FinalPetaFOP
             Console.Write("Please enter your password: ");
             string password = Console.ReadLine();
 
+            if(userList.Any(u => u.Name == name && u.Password == password))
+            {
+                Console.WriteLine("User already exists. Please try again.");
+                return null;
+            }
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
+            {
+                Console.WriteLine("Username and password cannot be empty. Please try again.");
+                return null;
+            }
+            if (!name.All(char.IsLetterOrDigit) || !password.All(char.IsLetterOrDigit))
+            {
+                Console.WriteLine("Username and password can only contain letters and digits. Please try again.");
+                return null;
+            }
+
             User userInfo = new User(name, password);
 
             userList.Add(userInfo);
 
             return userInfo;
-        }
-        public static void DisplayUsers()
-        {
-            if (userList.Count == 0)
-            {
-                Console.WriteLine("No users found.");
-                return;
-            }
-
-            foreach (User user in userList)
-            {
-                Console.WriteLine($"Username: {user.Name}");
-            }
         }
     }
 }
