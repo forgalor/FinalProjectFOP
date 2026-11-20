@@ -12,6 +12,7 @@ namespace FinalPetaFOP
     {
         public string Name { get; set; }
         public string Password { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public User()
         {
@@ -67,7 +68,6 @@ namespace FinalPetaFOP
                 }
             }
         }
-
 
         public void Order(List<Warehouse> productList)
         {
@@ -131,8 +131,7 @@ namespace FinalPetaFOP
         public void DisplayOrder(List<Warehouse> productList)
         {
             var userOrders = Program.orderList
-                .Where(o => o.Username == Name)
-                .ToList();
+                .Where(o => o.Username == Name).ToList();
 
             if (userOrders.Count == 0)
             {
@@ -140,17 +139,11 @@ namespace FinalPetaFOP
                 return;
             }
 
-            int i = 1;
-
             foreach (var order in userOrders)
             {
-                Console.WriteLine($"\nOrder #{i}");
-                Console.WriteLine($"Username: {order.Username}");
+                Console.WriteLine("\nOrder Details");  
                 Console.WriteLine($"Product Name: {order.ProductName}");
                 Console.WriteLine($"Quantity Ordered: {order.Quantity}");
-                Console.WriteLine($"Order Date: {order.OrderDate}");
-
-                i++;
             }
         }
     }

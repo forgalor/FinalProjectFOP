@@ -26,7 +26,7 @@ namespace FinalPetaFOP
 
             while (keepRunning)
             {
-                Console.WriteLine("\nChoose an option:");
+                Console.WriteLine("\nPlease select a user role to login:");
                 Console.WriteLine("1. Admin");
                 Console.WriteLine("2. Warehouse");
                 Console.WriteLine("3. User");
@@ -64,7 +64,6 @@ namespace FinalPetaFOP
                 }
             } 
         }
-        
         public static void Login(string accountType)
         {
             while (true)
@@ -91,40 +90,51 @@ namespace FinalPetaFOP
                 if (accountType == "_admin")
                 {
                     Admin admin = adminList.FirstOrDefault(
-                        a => a.Name == name && a.Password == password);
+                        a => a.Name == name && a.Password == password && a.IsActive);
 
-                    if (admin != null)
+                    if (admin != null && admin.IsActive)
                     {
-                        Console.WriteLine("Admin login successful!");
                         admin.Run();
                         return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("User is inactive.");
+                        break;
                     }
                 }
                 else if (accountType == "_warehouse")
                 {
                     Warehouse warehouse = warehouseList.FirstOrDefault(
-                        w => w.Name == name && w.Password == password);
+                        w => w.Name == name && w.Password == password && w.IsActive);
 
-                    if (warehouse != null)
+                    if (warehouse != null && warehouse.IsActive)
                     {
-                        Console.WriteLine("Warehouse login successful!");
                         warehouse.Run();
                         return;
+                    }
+                    else
+                    {
+                        Console.WriteLine("User is inactive.");
+                        break;
                     }
                 }
                 else if (accountType == "_user")
                 {
                     User user = userList.FirstOrDefault(
-                        u => u.Name == name && u.Password == password);
+                        u => u.Name == name && u.Password == password && u.IsActive);
 
-                    if (user != null)
+                    if (user != null && user.IsActive)
                     {
-                        Console.WriteLine("User login successful!");
                         user.Run();
                         return;
                     }
+                    else
+                    {
+                        Console.WriteLine("User is inactive.");
+                        break;
+                    }
                 }
-
                 Console.WriteLine("Incorrect username or password. Please try again.");
             }
         }

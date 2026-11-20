@@ -12,13 +12,24 @@ namespace FinalPetaFOP
         public string Name { get; set; }
         public int Quantity { get; set; }
         public string Password { get; set; }
+        public DateTime OrderDate { get; set; }
+        public string Username { get; set; }
+        public bool IsActive { get; set; } = true;
 
+
+        public Warehouse(string name, string password, string username)
+        {
+            Name = name;
+            Password = password;
+            OrderDate = DateTime.Now;
+            Username = username;
+
+        }
         public Warehouse(string name, string password)
         {
             Name = name;
             Password = password;
         }
-
         public Warehouse()
         {
         }
@@ -49,7 +60,7 @@ namespace FinalPetaFOP
                 switch (userInput)
                 {
                     case 1:
-                        AddProducts(Program.productList);
+                        AddProducts(Program.productList, this.Name);
                         break;
                     case 2:
                         DisplayProducts(Program.productList);
@@ -63,7 +74,7 @@ namespace FinalPetaFOP
                 }
             }
         }
-        public void AddProducts(List<Warehouse> productList)
+        public void AddProducts(List<Warehouse> productList, string warehouseName)
         {
             Console.WriteLine("Please enter the number of products to add:");
 
@@ -112,25 +123,29 @@ namespace FinalPetaFOP
                     continue;
                 }
 
-                productList.Add(new Warehouse
+                productList.Add(new Warehouse(name, "", warehouseName)
                 {
-                    Name = name,
                     Quantity = quantity
                 });
             }
         }
         public void DisplayProducts(List<Warehouse> productList)
         {
+            var userOrders = Program.orderList
+                .Where(o => o.Username == Name).ToList();
+
             if (productList.Count == 0)
-                Console.WriteLine("No Record found");
+                Console.WriteLine("No Products found");
 
             foreach (var product in productList)
             {
+                string status = product.Quantity > 0 ? "Yes" : "No";
+
                 Console.WriteLine($"\nProduct Name: {product.Name}");
                 Console.WriteLine($"Quantity: {product.Quantity}");
-                Console.WriteLine($"Active:");
-                Console.WriteLine($"Created Date: ");
-                Console.WriteLine($"Created by: ");
+                Console.WriteLine($"Active:{status}");
+                Console.WriteLine($"Created Date: {product.OrderDate}");
+                Console.WriteLine($"Created by: {product.Username}");
             }
         }
     }
