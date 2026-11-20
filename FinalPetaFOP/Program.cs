@@ -8,77 +8,125 @@ namespace FinalPetaFOP
 {
     internal class Program
     {
+        public static List<Admin> adminList = new List<Admin>();
+
+        public static List<Warehouse> warehouseList = new List<Warehouse>();
+
         public static List<User> userList = new List<User>();
 
         public static List<Warehouse> productList = new List<Warehouse>();
 
+        public static List<OrderRecord> orderList = new List<OrderRecord>();
+
         static void Main(string[] args)
         {
-            var optionSelect = "Choose an option: " +
-                                    "\n1. Admin" +
-                                    "\n2. Warehouse" +
-                                    "\n3. User";
+            Admin.GetInitialValues();
 
-            Console.WriteLine(optionSelect);
-            var userChoice = Console.ReadLine();
+            var keepRunning = true;
 
-            if (!int.TryParse(userChoice, out int userInput))
+            while (keepRunning)
             {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
-                return;
-            }
-          
-            switch (userInput)
-            {
-                case 1:
-                    Admin admin = new Admin();
-                    admin.Run();
-                    break;
+                Console.WriteLine("\nChoose an option:");
+                Console.WriteLine("1. Admin");
+                Console.WriteLine("2. Warehouse");
+                Console.WriteLine("3. User");
+                Console.WriteLine("4. Exit");
 
-                case 2:
-                    Warehouse warehouse = new Warehouse();
-                    warehouse.Run();
-                    break;
+                var userChoice = Console.ReadLine();
 
-                case 3:
-                    User user = new User();
-                    user.Run();
-                    break;
+                if (!int.TryParse(userChoice, out int userInput))
+                {
+                    Console.WriteLine("Invalid input.");
+                    continue;
+                }
 
-                default:
-                    Console.WriteLine("Invalid choice!");
-                    break;
-            }   
+                switch (userInput)
+                {
+                    case 1:
+                        Login("_admin");
+                        break;
+
+                    case 2:
+                        Login("_warehouse");
+                        break;
+
+                    case 3:
+                        Login("_user");
+                        break;
+
+                    case 4:
+                        keepRunning = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice!");
+                        break;
+                }
+            } 
         }
-        public static User UserLogin()
+        
+        public static void Login(string accountType)
         {
-            Console.Write("\nPlease enter your username: ");
-            string name = Console.ReadLine();
-
-            Console.Write("Please enter your password: ");
-            string password = Console.ReadLine();
-
-            if(userList.Any(u => u.Name == name && u.Password == password))
+            while (true)
             {
-                Console.WriteLine("User already exists. Please try again.");
-                return null;
-            }
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
-            {
-                Console.WriteLine("Username and password cannot be empty. Please try again.");
-                return null;
-            }
-            if (!name.All(char.IsLetterOrDigit) || !password.All(char.IsLetterOrDigit))
-            {
-                Console.WriteLine("Username and password can only contain letters and digits. Please try again.");
-                return null;
-            }
+                Console.Write("\nPlease enter your username: ");
+                string name = Console.ReadLine();
 
-            User userInfo = new User(name, password);
+                Console.Write("Please enter your password: ");
+                string password = Console.ReadLine();
 
-            userList.Add(userInfo);
+                if (string.IsNullOrWhiteSpace(name) ||
+                    string.IsNullOrWhiteSpace(password))
+                {
+                    Console.WriteLine("Fields cannot be empty.");
+                    continue;
+                }
 
-            return userInfo;
+                if (!name.EndsWith(accountType))
+                {
+                    Console.WriteLine($"Please use an account ending in {accountType}.");
+                    continue;
+                }
+
+                if (accountType == "_admin")
+                {
+                    Admin admin = adminList.FirstOrDefault(
+                        a => a.Name == name && a.Password == password);
+
+                    if (admin != null)
+                    {
+                        Console.WriteLine("Admin login successful!");
+                        admin.Run();
+                        return;
+                    }
+                }
+                else if (accountType == "_warehouse")
+                {
+                    Warehouse warehouse = warehouseList.FirstOrDefault(
+                        w => w.Name == name && w.Password == password);
+
+                    if (warehouse != null)
+                    {
+                        Console.WriteLine("Warehouse login successful!");
+                        warehouse.Run();
+                        return;
+                    }
+                }
+                else if (accountType == "_user")
+                {
+                    User user = userList.FirstOrDefault(
+                        u => u.Name == name && u.Password == password);
+
+                    if (user != null)
+                    {
+                        Console.WriteLine("User login successful!");
+                        user.Run();
+                        return;
+                    }
+                }
+
+                Console.WriteLine("Incorrect username or password. Please try again.");
+            }
         }
     }
 }

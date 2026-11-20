@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,24 +13,27 @@ namespace FinalPetaFOP
         public string Name { get; set; }
         public string Password { get; set; }
 
-        List<User> userList = new List<User>();
+        public Admin()
+        {
+        }
+        public Admin(string name, string password)
+        {
+            Name = name;
+            Password = password;
+        }
 
-        List<Warehouse> productList = new List<Warehouse>();
+       
         public void Run()
         {
-            
-
             var keepRunning = true;
-
-            Program.UserLogin();
 
             while (keepRunning)
             {
                 var optionSelect = "Please select an option: " +
-                                    "\n1. Add Products" +
-                                    "\n2. Display Products" +
-                                    "\n3. Inactivate User" +
-                                    "\n4. Display Users" +
+                                    "\n1. Update Password" +
+                                    "\n2. Inactivate User" +
+                                    "\n3. Add User" +
+                                    "\n4. Display All Users" +
                                     "\n5. Display Inactive Users" +
                                     "\n6. Display Active Users" +
                                     "\n7. Display Products" +
@@ -57,10 +61,10 @@ namespace FinalPetaFOP
                         //InactivateUser;
                         break;
                     case 3:
-                        //Program.GetUserInfo();
+                        AddUser(Program.productList);
                         break;
                     case 4:
-                        //DisplayUsers();
+                        DisplayUsers();
                         break;
                     case 5:
                         //DisplayInactiveUsers();
@@ -73,7 +77,8 @@ namespace FinalPetaFOP
                         warehouse.DisplayProducts(Program.productList);
                         break;
                     case 8:
-                        //DisplayOrders();
+                        User user = new User();
+                        user.DisplayOrder(Program.productList);
                         break;
                     case 9:
                         keepRunning = false;
@@ -84,15 +89,24 @@ namespace FinalPetaFOP
                 }
             }
         }
+        public static void GetInitialValues()
+        {
+            Program.adminList.Add(new Admin("sean_admin", "admin123"));
+
+            Program.warehouseList.Add(new Warehouse("sean_warehouse", "warehouse123"));
+
+            Program.userList.Add(new User("sean_user", "user123"));
+        }
+
         public void UpdatePassword(List<string> productList)
         {
-            
+            Console.WriteLine("Test");
         }
         public void InactivateUser(List<string> productList)
         {
 
         }
-        public static User AddUser(List<string> productList)
+        public static User AddUser(List<Warehouse> productList)
         {
             Console.Write("\nPlease enter your username: ");
             string name = Console.ReadLine();
@@ -100,11 +114,11 @@ namespace FinalPetaFOP
             Console.Write("Please enter your password: ");
             string password = Console.ReadLine();
 
-            Admin admin = new Admin();
 
-            if (admin.userList.Any(u => u.Name == name && u.Password == password))
+
+            if (Program.userList.Any(u => u.Name == name))
             {
-                Console.WriteLine("User already exists. Please try again.");
+                Console.WriteLine("Username already exists.");
                 return null;
             }
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
@@ -112,9 +126,14 @@ namespace FinalPetaFOP
                 Console.WriteLine("Username and password cannot be empty. Please try again.");
                 return null;
             }
-            if (!name.All(char.IsLetterOrDigit) || !password.All(char.IsLetterOrDigit))
+            if (!name.All(c => char.IsLetterOrDigit(c) || c == '_'))
             {
-                Console.WriteLine("Username and password can only contain letters and digits. Please try again.");
+                Console.WriteLine("Username can only contain letters, numbers, and underscores.");
+                return null;
+            }
+            if (!password.All(char.IsLetterOrDigit))
+            {
+                Console.WriteLine("Password can only contain letters and numbers.");
                 return null;
             }
 
@@ -122,7 +141,7 @@ namespace FinalPetaFOP
 
             User userInfo = new User(name, password);
 
-            admin.userList.Add(userInfo);
+            Program.userList.Add(userInfo);
 
             return userInfo;
         }
@@ -134,24 +153,22 @@ namespace FinalPetaFOP
                 return;
             }
 
+            int i = 1;
+
             foreach (User user in Program.userList)
             {
-                Console.WriteLine($"Username: {user.Name}");
+                Console.WriteLine($"{i}: {user.Name}");
+                i++;
             }
         }
         public void DisplayInactiveUser(List<string> productList)
         {
-
+            Console.WriteLine("Test");
         }
         public void DisplayActiveUsers(List<string> productList)
         {
-
+            Console.WriteLine("Test");
         }
-        public void DisplayProducts(List<string> productList)
-        {
-
-        }
-       
     }
 }
 

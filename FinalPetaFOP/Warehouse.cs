@@ -11,6 +11,13 @@ namespace FinalPetaFOP
     {
         public string Name { get; set; }
         public int Quantity { get; set; }
+        public string Password { get; set; }
+
+        public Warehouse(string name, string password)
+        {
+            Name = name;
+            Password = password;
+        }
 
         public Warehouse()
         {
@@ -18,11 +25,7 @@ namespace FinalPetaFOP
 
         public void Run()
         {
-            List<string> productList = new List<string>();
-
             var keepRunning = true;
-
-            Program.UserLogin();
 
             while (keepRunning)
             {
@@ -62,15 +65,15 @@ namespace FinalPetaFOP
         }
         public void AddProducts(List<Warehouse> productList)
         {
-            Console.WriteLine("Please enter the number of products to add");
-            var input = Console.ReadLine();
+            Console.WriteLine("Please enter the number of products to add:");
 
-            if (!int.TryParse(input, out int productsEntered))
+            if (!int.TryParse(Console.ReadLine(), out int productsEntered))
             {
                 Console.WriteLine("Invalid input. Please enter a valid number.");
                 return;
             }
-             if (productsEntered <= 0)
+
+            if (productsEntered <= 0)
             {
                 Console.WriteLine("Number of products must be greater than zero.");
                 return;
@@ -86,14 +89,15 @@ namespace FinalPetaFOP
                     i--; 
                     continue;
                 }
-                if (productList.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                if (productList.Any(p => p.Name != null && p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
                     Console.WriteLine("Product already exists. Please enter a different name.");
-                    i--; 
+                    i--;
                     continue;
                 }
 
                 Console.Write($"{i}. Enter product quantity: ");
+
                 if (!int.TryParse(Console.ReadLine(), out int quantity))
                 {
                     Console.WriteLine("Invalid input. Please enter a valid number.");
@@ -103,19 +107,16 @@ namespace FinalPetaFOP
 
                 if (quantity <= 0)
                 {
-                    Console.WriteLine("Quantity must be greater than zero. Please enter a valid quantity.");
-                    i--; 
+                    Console.WriteLine("Quantity must be greater than zero.");
+                    i--;
                     continue;
                 }
-                if (!int.TryParse(Console.ReadLine(), out quantity))
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number.");
-                    i--; 
-                    continue;
-                }
-                
 
-                productList.Add(new Warehouse { Name = name, Quantity = quantity });
+                productList.Add(new Warehouse
+                {
+                    Name = name,
+                    Quantity = quantity
+                });
             }
         }
         public void DisplayProducts(List<Warehouse> productList)
