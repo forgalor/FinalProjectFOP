@@ -36,7 +36,7 @@ namespace FinalPetaFOP
 
                 if (!int.TryParse(userChoice, out int userInput))
                 {
-                    Console.WriteLine("Invalid input.");
+                    Console.WriteLine("Invalid input.  Please enter a valid number.");
                     continue;
                 }
 
@@ -59,7 +59,7 @@ namespace FinalPetaFOP
                         break;
 
                     default:
-                        Console.WriteLine("Invalid choice!");
+                        Console.WriteLine("Invalid choice.  Please enter a valid number.");
                         break;
                 }
             } 

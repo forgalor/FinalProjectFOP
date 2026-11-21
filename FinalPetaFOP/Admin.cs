@@ -48,7 +48,7 @@ namespace FinalPetaFOP
                 if (!int.TryParse(userChoice, out int userInput))
                 {
                     Console.WriteLine("Invalid input. Please enter a valid number.");
-                    return;
+                    continue;
                 }
 
                 switch (userInput)
@@ -82,8 +82,8 @@ namespace FinalPetaFOP
                         keepRunning = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid input");
-                        break;
+                        Console.WriteLine("Invalid input.  Please enter a valid number.");
+                        continue;
                 }
             }
         }
@@ -529,8 +529,8 @@ namespace FinalPetaFOP
                 Console.WriteLine($"\nOrder #{i}");
                 Console.WriteLine($"Product Name: {order.ProductName}");
                 Console.WriteLine($"Quantity Ordered: {order.Quantity}");
-                Console.WriteLine($"Created By: {order.Username}");
-                Console.WriteLine($"Created Date: {order.OrderDate}");
+                Console.WriteLine($"Ordered By: {order.Username}");
+                Console.WriteLine($"Order Date: {order.OrderDate}");
                 i++;
             }
         }

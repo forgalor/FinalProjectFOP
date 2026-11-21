@@ -53,7 +53,7 @@ namespace FinalPetaFOP
                 if (!int.TryParse(userChoice, out int userInput))
                 {
                     Console.WriteLine("Invalid input. Please enter a valid number.");
-                    return;
+                    continue;
                 }
 
                 switch (userInput)
@@ -68,14 +68,14 @@ namespace FinalPetaFOP
                         keepRunning = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid input");
-                        break;
+                        Console.WriteLine("Invalid input.  Please enter a valid number.");
+                        continue;
                 }
             }
         }
         public void AddProducts(List<Warehouse> productList, string warehouseName)
         {
-            Console.WriteLine("Please enter the number of products to add:");
+            Console.Write("Please enter the number of products to add:");
 
             if (!int.TryParse(Console.ReadLine(), out int productsEntered))
             {
