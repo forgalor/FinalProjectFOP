@@ -14,7 +14,6 @@ namespace FinalPetaFOP
         public string Name { get; set; }
         public string Password { get; set; }
         public bool IsActive { get; set; } = true;
-
         public Admin()
         {
         }
@@ -23,8 +22,6 @@ namespace FinalPetaFOP
             Name = name;
             Password = password;
         }
-
-       
         public void Run()
         {
             var keepRunning = true;
@@ -79,8 +76,7 @@ namespace FinalPetaFOP
                         warehouse.DisplayProducts(Program.productList);
                         break;
                     case 8:
-                        User user = new User();
-                        user.DisplayOrder(Program.productList);
+                        DisplayOrders(Program.productList);
                         break;
                     case 9:
                         keepRunning = false;
@@ -101,19 +97,17 @@ namespace FinalPetaFOP
         }
         public void UpdatePassword()
         {
-
             DisplayUsers();
 
-            int totalAccounts = Program.adminList.Count + Program.warehouseList.Count + Program.userList.Count;
+            int totalActive = Program.adminList.Count(a => a.IsActive) + Program.warehouseList.Count(w => w.IsActive) + Program.userList.Count(u => u.IsActive);
 
-            if (totalAccounts == 0)
+            if (totalActive == 0)
             {
-                Console.WriteLine("No accounts found.");
+                Console.WriteLine("No active accounts found.");
                 return;
             }
 
-            if (!int.TryParse(Console.ReadLine(), out int userNumber) ||
-                userNumber < 1 || userNumber > totalAccounts)
+            if (!int.TryParse(Console.ReadLine(), out int userNumber) || userNumber < 1 || userNumber > totalActive)
             {
                 Console.WriteLine("Invalid selection.");
                 return;
@@ -123,32 +117,47 @@ namespace FinalPetaFOP
 
             foreach (Admin admin in Program.adminList)
             {
-                if (selectedNumber == userNumber)
+                if (admin.IsActive)
                 {
-                    UpdateAccountPassword(admin);
-                    return;
-                }
-                selectedNumber++;
+                    if (selectedNumber == userNumber)
+                    {
+                        UpdateAccountPassword(admin);
+                        return;
+                    }
+
+                    selectedNumber++;
+
+                }  
             }
 
             foreach (Warehouse warehouse in Program.warehouseList)
             {
-                if (selectedNumber == userNumber)
+                if (warehouse.IsActive)
                 {
-                    UpdateAccountPassword(warehouse);
-                    return;
+                    if (selectedNumber == userNumber)
+                    {
+                        UpdateAccountPassword(warehouse);
+                        return;
+                    }
+
+                    selectedNumber++;
+
                 }
-                selectedNumber++;
             }
 
             foreach (User user in Program.userList)
             {
-                if (selectedNumber == userNumber)
+                if (user.IsActive)
                 {
-                    UpdateAccountPassword(user);
-                    return;
+                    if (selectedNumber == userNumber)
+                    {
+                        UpdateAccountPassword(user);
+                        return;
+                    }
+
+                    selectedNumber++;
+
                 }
-                selectedNumber++;
             }
         }
         private void UpdateAccountPassword(Admin admin)
@@ -241,15 +250,42 @@ namespace FinalPetaFOP
 
             Console.WriteLine("Password updated successfully.");
         }
-        public static int SelectAccount()
+        public static int SelectAccount(bool activeOnly = false)
         {
-            DisplayUsers();
+            int i = 1;
 
-            int totalAccounts = Program.adminList.Count + Program.warehouseList.Count + Program.userList.Count;
+            foreach (Admin admin in Program.adminList)
+            {
+                if (!activeOnly || admin.IsActive)
+                {
+                    Console.WriteLine($"{i}. {admin.Name}");
+                    i++;
+                }
+            }
+
+            foreach (Warehouse warehouse in Program.warehouseList)
+            {
+                if (!activeOnly || warehouse.IsActive)
+                {
+                    Console.WriteLine($"{i}. {warehouse.Name}");
+                    i++;
+                }
+            }
+
+            foreach (User user in Program.userList)
+            {
+                if (!activeOnly || user.IsActive)
+                {
+                    Console.WriteLine($"{i}. {user.Name}");
+                    i++;
+                }
+            }
+
+            int totalAccounts = i - 1;
 
             if (totalAccounts == 0)
             {
-                Console.WriteLine("No accounts found.");
+                Console.WriteLine(activeOnly ? "No active accounts found." : "No accounts found.");
                 return -1;
             }
 
@@ -274,20 +310,53 @@ namespace FinalPetaFOP
 
             if (choice <= adminCount)
             {
-                Program.adminList[choice - 1].IsActive = false;
+                Admin selectedAdmin = Program.adminList[choice - 1];
+
+                if (!selectedAdmin.IsActive)
+                {
+                    Console.WriteLine("This account is already inactive.");
+                    return;
+                }
+
+                int activeAdminCount = Program.adminList.Count(a => a.IsActive);
+
+                if (activeAdminCount <= 1)
+                {
+                    Console.WriteLine("Cannot inactivate the only remaining active admin.");
+                    return;
+                }
+
+                selectedAdmin.IsActive = false;
             }
             else if (choice <= adminCount + warehouseCount)
             {
-                Program.warehouseList[choice - adminCount - 1].IsActive = false;
+                Warehouse selectedWarehouse =
+                    Program.warehouseList[choice - adminCount - 1];
+
+                if (!selectedWarehouse.IsActive)
+                {
+                    Console.WriteLine("This account is already inactive.");
+                    return;
+                }
+
+                selectedWarehouse.IsActive = false;
             }
             else
             {
-                Program.userList[choice - adminCount - warehouseCount - 1].IsActive = false;
+                User selectedUser =
+                    Program.userList[choice - adminCount - warehouseCount - 1];
+
+                if (!selectedUser.IsActive)
+                {
+                    Console.WriteLine("This account is already inactive.");
+                    return;
+                }
+
+                selectedUser.IsActive = false;
             }
 
             Console.WriteLine("Account successfully inactivated.");
         }
-       
         public static void AddUser()
         {
             Console.Write("\nPlease enter your username: ");
@@ -339,7 +408,6 @@ namespace FinalPetaFOP
             Console.WriteLine($"Account {name} has been successfully added.");
             return;
         }
-
         public static void DisplayUsers()
         {
             if (Program.userList.Count == 0 && Program.adminList.Count == 0 && Program.warehouseList.Count == 0)
@@ -352,17 +420,14 @@ namespace FinalPetaFOP
 
             foreach (Admin admin in Program.adminList)
             {
-                
                  Console.WriteLine($"{i}. {admin.Name}");
                  i++;
-                
             }
 
             foreach (Warehouse warehouse in Program.warehouseList)
             {
                 Console.WriteLine($"{i}. {warehouse.Name}");
                 i++;
-  
             }
 
             foreach (User user in Program.userList)
@@ -450,17 +515,23 @@ namespace FinalPetaFOP
         public void DisplayOrders(List<Warehouse> productList)
         {
             var userOrders = Program.orderList;
+
             if (userOrders.Count == 0)
             {
-                Console.WriteLine("You have no orders yet.");
+                Console.WriteLine("No orders found.");
                 return;
             }
 
+            int i = 1;
+
             foreach (var order in userOrders)
             {
-                Console.WriteLine("\nOrder Details");
+                Console.WriteLine($"\nOrder #{i}");
                 Console.WriteLine($"Product Name: {order.ProductName}");
                 Console.WriteLine($"Quantity Ordered: {order.Quantity}");
+                Console.WriteLine($"Created By: {order.Username}");
+                Console.WriteLine($"Created Date: {order.OrderDate}");
+                i++;
             }
         }
     }

@@ -89,53 +89,79 @@ namespace FinalPetaFOP
 
                 if (accountType == "_admin")
                 {
-                    Admin admin = adminList.FirstOrDefault(
-                        a => a.Name == name && a.Password == password && a.IsActive);
+                    Admin admin = adminList.FirstOrDefault(a => a.Name == name);
 
-                    if (admin != null && admin.IsActive)
+                    if (admin == null)
                     {
-                        admin.Run();
-                        return;
+                        Console.WriteLine("Username does not exist.");
+                        continue;
                     }
-                    else
+
+                    if (admin.Password != password)
+                    {
+                        Console.WriteLine("Incorrect username or password. Please try again.");
+                        continue;
+                    }
+
+                    if (!admin.IsActive)
                     {
                         Console.WriteLine("User is inactive.");
                         break;
                     }
+
+                    admin.Run();
+                    return;
                 }
                 else if (accountType == "_warehouse")
                 {
-                    Warehouse warehouse = warehouseList.FirstOrDefault(
-                        w => w.Name == name && w.Password == password && w.IsActive);
+                    Warehouse warehouse = warehouseList.FirstOrDefault(w => w.Name == name);
 
-                    if (warehouse != null && warehouse.IsActive)
+                    if (warehouse == null)
                     {
-                        warehouse.Run();
-                        return;
+                        Console.WriteLine("Username does not exist.");
+                        continue;
                     }
-                    else
+
+                    if (warehouse.Password != password)
+                    {
+                        Console.WriteLine("Incorrect username or password. Please try again.");
+                        continue;
+                    }
+
+                    if (!warehouse.IsActive)
                     {
                         Console.WriteLine("User is inactive.");
                         break;
                     }
+
+                    warehouse.Run();
+                    return;
                 }
                 else if (accountType == "_user")
                 {
-                    User user = userList.FirstOrDefault(
-                        u => u.Name == name && u.Password == password && u.IsActive);
+                    User user = userList.FirstOrDefault(u => u.Name == name);
 
-                    if (user != null && user.IsActive)
+                    if (user == null)
                     {
-                        user.Run();
-                        return;
+                        Console.WriteLine("Username does not exist.");
+                        continue;
                     }
-                    else
+
+                    if (user.Password != password)
+                    {
+                        Console.WriteLine("Incorrect username or password. Please try again.");
+                        continue;
+                    }
+
+                    if (!user.IsActive)
                     {
                         Console.WriteLine("User is inactive.");
                         break;
                     }
+
+                    user.Run();
+                    return;
                 }
-                Console.WriteLine("Incorrect username or password. Please try again.");
             }
         }
     }

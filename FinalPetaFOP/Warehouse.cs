@@ -16,7 +16,6 @@ namespace FinalPetaFOP
         public string Username { get; set; }
         public bool IsActive { get; set; } = true;
 
-
         public Warehouse(string name, string password, string username)
         {
             Name = name;
