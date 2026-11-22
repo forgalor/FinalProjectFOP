@@ -320,7 +320,7 @@ namespace FinalPetaFOP
 
                 if (selectedAdmin.Name == currentAdminName)
                 {
-                    Console.WriteLine("You cannot inactivate your own account.");
+                    Console.WriteLine("You cannot inactivate the account you are logged in with.");
                     return;
                 }
 
