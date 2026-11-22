@@ -68,7 +68,6 @@ namespace FinalPetaFOP
                 }
             }
         }
-
         public void Order(List<Warehouse> productList)
         {
             if (productList.Count == 0)

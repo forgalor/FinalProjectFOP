@@ -57,7 +57,7 @@ namespace FinalPetaFOP
                         UpdatePassword();
                         break;
                     case 2:
-                        InactivateUser();
+                        InactivateUser(this.Name);
                         break;
                     case 3:
                         AddUser();
@@ -97,7 +97,7 @@ namespace FinalPetaFOP
         }
         public void UpdatePassword()
         {
-            DisplayUsers();
+            DisplayActiveUsers();
 
             int totalActive = Program.adminList.Count(a => a.IsActive) + Program.warehouseList.Count(w => w.IsActive) + Program.userList.Count(u => u.IsActive);
 
@@ -298,12 +298,12 @@ namespace FinalPetaFOP
 
             return choice;
         }
-        public void InactivateUser()
+        public void InactivateUser(string currentAdminName)
         {
             int choice = SelectAccount();
 
             if (choice == -1)
-                return;
+            return;
 
             int adminCount = Program.adminList.Count;
             int warehouseCount = Program.warehouseList.Count;
@@ -315,6 +315,12 @@ namespace FinalPetaFOP
                 if (!selectedAdmin.IsActive)
                 {
                     Console.WriteLine("This account is already inactive.");
+                    return;
+                }
+
+                if (selectedAdmin.Name == currentAdminName)
+                {
+                    Console.WriteLine("You cannot inactivate your own account.");
                     return;
                 }
 
@@ -529,8 +535,9 @@ namespace FinalPetaFOP
                 Console.WriteLine($"\nOrder #{i}");
                 Console.WriteLine($"Product Name: {order.ProductName}");
                 Console.WriteLine($"Quantity Ordered: {order.Quantity}");
-                Console.WriteLine($"Ordered By: {order.Username}");
                 Console.WriteLine($"Order Date: {order.OrderDate}");
+                Console.WriteLine($"Ordered By: {order.Username}");
+
                 i++;
             }
         }

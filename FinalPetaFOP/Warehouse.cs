@@ -91,7 +91,8 @@ namespace FinalPetaFOP
                 for (int i = 1; i <= productsEntered; i++)
             {
                 Console.Write($"{i}. Enter product name: ");
-                string name = Console.ReadLine();
+
+                string name = Console.ReadLine().Trim();
 
                 if (string.IsNullOrWhiteSpace(name))
                 {
@@ -144,7 +145,7 @@ namespace FinalPetaFOP
                 Console.WriteLine($"Quantity: {product.Quantity}");
                 Console.WriteLine($"Active:{status}");
                 Console.WriteLine($"Created Date: {product.OrderDate}");
-                Console.WriteLine($"Created by: {product.Username}");
+                Console.WriteLine($"Created By: {product.Username}");
             }
         }
     }
