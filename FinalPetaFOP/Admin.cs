@@ -89,11 +89,11 @@ namespace FinalPetaFOP
         }
         public static void GetInitialValues()
         {
-            Program.adminList.Add(new Admin("test_admin", "123"));
+            Program.adminList.Add(new Admin("sean_admin", "123"));
 
-            Program.warehouseList.Add(new Warehouse("test_warehouse", "123"));
+            Program.warehouseList.Add(new Warehouse("adam_warehouse", "123"));
 
-            Program.userList.Add(new User("test_user", "123"));
+            Program.userList.Add(new User("john_user", "123"));
         }
         public void UpdatePassword()
         {
