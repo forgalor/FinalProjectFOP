@@ -8,6 +8,13 @@ namespace FinalPetaFOP
 {
     internal class Program
     {
+        //Leader: Sean Harvey Lacsamana
+        //Co Leader: John Patrick Dela Cruz
+        //Members:
+        //Keith Adam Pineda
+        //Mike Bellosa 
+        //John Redge Marinas
+
         public static List<Admin> adminList = new List<Admin>();
 
         public static List<Warehouse> warehouseList = new List<Warehouse>();

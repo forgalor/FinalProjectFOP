@@ -116,9 +116,9 @@ namespace FinalPetaFOP
                     continue;
                 }
 
-                if (quantity <= 0)
+                if (quantity < 0)
                 {
-                    Console.WriteLine("Quantity must be greater than zero.");
+                    Console.WriteLine("Quantity cannot be negative.");
                     i--;
                     continue;
                 }
