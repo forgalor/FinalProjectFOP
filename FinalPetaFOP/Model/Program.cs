@@ -9,7 +9,7 @@ namespace FinalPetaFOP
     internal class Program
     {
         //Leader: Sean Harvey Lacsamana
-        //Co Leader: John Patrick Dela Cruz
+        //Co Leader: John Patrick Roset
         //Members:
         //Keith Adam Pineda
         //Mike Bellosa 
